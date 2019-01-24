@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
  * así como métodos utiles para manejar arrays de bytes.
  * 
  * @author Rubén
- *
  */
 
 public class UtilesArrayBytes {
@@ -112,9 +111,6 @@ public class UtilesArrayBytes {
 		int i = 0;
 		
 		//No hace falta que lo digas, sé que esto es un desastre.
-		
-		//teslo way
-		
 		
 		for (int j = 0;j < pt1.length;j++) {
 			resultado[i] = pt1[j];
