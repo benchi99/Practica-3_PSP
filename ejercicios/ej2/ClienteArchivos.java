@@ -9,6 +9,17 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * 
+ * ===================EJERCICIO 2==========================
+ * 
+ * Programa que se conecta a un servidor del que descargará
+ * un archivo especificado por el usuario.
+ * 
+ * @author Rubén
+ *
+ */
+
 public class ClienteArchivos {
 
 	String ip = "localhost";
@@ -75,11 +86,11 @@ public class ClienteArchivos {
 	}
 
 	/**
+	 * Dados un archivo de destino y un InputStream, guardará la información que este reciba en un archivo.
 	 * 
-	 * 
-	 * @param destino
-	 * @param entradaNet
-	 * @throws IOException
+	 * @param destino El destino del archivo.
+	 * @param entradaNet El InputStream en concreto.
+	 * @throws IOException Error de E/S.
 	 */
 	
 	private void descarga(File destino, DataInputStream entradaNet) throws IOException {
@@ -109,11 +120,11 @@ public class ClienteArchivos {
 	}
 
 	/**
+	 * Dado una ruta y un OutputStream, envía al servidor la ruta que debe buscar.
 	 * 
-	 * 
-	 * @param ruta
-	 * @param salidaNet
-	 * @throws IOException
+	 * @param ruta Ruta en concreto.
+	 * @param salidaNet OutputStream en cuestión.
+	 * @throws IOException Error de E/S.
 	 */
 	
 	private void enviarRuta(String ruta, DataOutputStream salidaNet) throws IOException {
