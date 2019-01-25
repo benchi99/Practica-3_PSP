@@ -101,19 +101,14 @@ public class ClienteArchivos {
 		byte[] buffer = new byte[1000];
 		System.out.println("[INFO] Descargando...");
 		int leidos = entradaNet.read(buffer, 0, 1000);
-		long total = leidos;
 		while (true) {
-			System.out.println("[AA] Escribiendo a archivo...");
 			bufferSalidaArchivo.write(buffer, 0, leidos);
-			System.out.println("[AAA] Leyendo del servidor...");
-			leidos = entradaNet.read(buffer, 0, 1000);
-			total = total + leidos;
-			System.out.println("[AAAA] Leyendo status de copia...");
 			byte status = entradaNet.readByte();
-			System.out.println("[AAAAA] Comprobando estado de copia...");
 			if (status == 1) {
 				break;
 			}
+			leidos = entradaNet.read(buffer, 0, 1000);
+			
 		}
 		System.out.println("Descarga del archivo finalizada.");
 		bufferSalidaArchivo.close();
