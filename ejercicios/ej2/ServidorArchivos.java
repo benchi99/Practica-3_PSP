@@ -34,21 +34,22 @@ public class ServidorArchivos {
 			
 			while (true) {
 				System.out.println("[INFO] Esperando petición de " + cliente.getInetAddress() + "...");
-				int longFi = dis.readInt();
-				if (longFi == 0) {
+				int longFi = dis.readInt(); //Leo la longitud de la ruta escrita por el cliente
+				if (longFi == 0) {		//Si no ha escrito nada, el cliente se ha finalizado, terminamos el bucle.
 					break;
 				} else {
-					File archivoDeseado = crearFileABuscar(dis, longFi);
+					File archivoDeseado = crearFileABuscar(dis, longFi);	//Creo objeto File con el objeto a transmitir.
 					System.out.println("[INFO] Buscando el archivo " + archivoDeseado.getName() + "...");
-					if (archivoDeseado.exists()) {
+					if (archivoDeseado.exists()) {	//Si existe, se transfiere.
 						transferirArchivo(archivoDeseado, dos);
-					} else {
+					} else {						//Si no, da un error.
 						System.err.println("[ERROR] Archivo no encontrado.");
 						dos.writeByte(0);
 					}
 				}
 			}
 			
+			//Finalmente cuando el cliente finaliza la conexión, finalizamos los streams y sockets.
 			cerrar(dis, dos ,server, cliente);
 			
 		} catch (IOException ioe) {
@@ -68,11 +69,13 @@ public class ServidorArchivos {
 	
 	private File crearFileABuscar(DataInputStream dis, int longitud) throws IOException {
 		byte[] fi = new byte[longitud];
+		//Leo la ruta
 		for (int i = 0; i < fi.length; i++) {
 			fi[i] = dis.readByte();
 		}
 		String ruta = new String(fi);
 		
+		//Devuelvo el objeto File
 		return new File(ruta);
 	}
 	
@@ -86,11 +89,12 @@ public class ServidorArchivos {
 	
 	private void transferirArchivo(File archivo, DataOutputStream dos) throws IOException {
 		System.out.println("[INFO] Archivo encontrado. Comenzando la transferencia...");
-		dos.writeByte(1);
-		dos.writeLong(archivo.length());
+		dos.writeByte(1);		//Notifico al cliente que el archivo ha sido encontrado.
+		dos.writeLong(archivo.length());	//Envío al cliente la longitud del archivo.
 		FileInputStream fis = new FileInputStream(archivo);
 		BufferedInputStream bis = new BufferedInputStream(fis);
 		byte[] buffer = new byte[1000];
+		//Comienza la transferencia del archivo al cliente.
 		System.out.println("[INFO] Transfiriendo...");
 		int leido = bis.read(buffer, 0, buffer.length);
 		int total = 0;
@@ -101,7 +105,7 @@ public class ServidorArchivos {
 			bis.read(buffer, 0, buffer.length);
 		}
 		dos.write(buffer, 0, leido);
-		dos.writeByte(1);
+		dos.writeByte(1);	//Notifico que el archivo ha sido completamente transferido.
 		System.out.println("[INFO] Transferencia finalizada.");
 		bis.close();
 	}

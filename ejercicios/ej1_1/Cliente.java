@@ -6,6 +6,17 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * =====================EJERCICIO 1.1==========================
+ * Programa que se conecta a un servidor que gestiona cuentas
+ * matemáticas simples. Se encarga de leer información del cliente,
+ * enviarsela al servidor usando el protocolo TCP/IP y leer la
+ * respuesta de vuelta del servidor.
+ * 
+ * @author Rubén
+ *
+ */
+
 public class Cliente {
 
 	String ip = "localhost";
@@ -28,42 +39,29 @@ public class Cliente {
 		
 		try {
 			System.out.println("[INFO] Estableciendo conexión...");
-			sock = new Socket(ip, port);
+			sock = new Socket(ip, port);	//Intentamos conectarnos al cliente.
 			System.out.println("[INFO] Conexión establecida.");
+			//Establecemos los streams de entrada y salida.
 			entrada = new DataInputStream(sock.getInputStream());
 			salida = new DataOutputStream(sock.getOutputStream());
 		
 			while (true) {
-				
 				System.out.println(" - CLIENTE OPERACIONES ARITMÉTICAS - ");
 				System.out.print("Seleccione operación ó comando (+, -, *, /): ");
-				op = teclado.next().toUpperCase().charAt(0);
-				switch (op) {
-					case '+':
-						construirInstruccion();
-						break;
-					case '-':
-						construirInstruccion();
-						break;
-					case '*':
-						construirInstruccion();
-						break;
-					case '/':
-						construirInstruccion();
-						break;
-					case 'F':
-						System.out.println("[INFO] Finalizando la conexión...");
-						entrada.close();
-						salida.close();
-						sock.close();
-						System.exit(0);
-						break;
-					case 'A':
-						op = 'A';
-						break;
-					default:	
-						System.out.println("Sintáxis inválida.");
-						break;
+				op = teclado.next().toUpperCase().charAt(0);	//Leo del teclado la operación deseado.
+
+				if (op == '+' || op == '-' || op == '*' || op == '/') {		//Construyo la instrucción para el servidor.
+					construirInstruccion();	
+				} else if (op == 'F') {			//El cliente quiere finalizar la aplicación.
+					System.out.println("[INFO] Finalizando la conexión...");
+					entrada.close();
+					salida.close();
+					sock.close();
+					System.exit(0);
+				} else if (op == 'A') {		//El cliente quiere abortar el servidor.
+					op = 'A';
+				} else {		//No se ha introducido nada válido.
+					System.out.println("Sintáxis inválida.");
 				}
 				
 				enviarInformacion(salida);
@@ -99,7 +97,6 @@ public class Cliente {
 	 */
 	
 	private void enviarInformacion(DataOutputStream dos) throws IOException {
-		
 		int ope = op;
 		
 		if((op == 'F') || (op == 'A')) {
@@ -123,7 +120,6 @@ public class Cliente {
 		int cuentas = dis.readInt();	
 		long sol = dis.readLong();
 		int longStr = dis.readInt();
-		System.out.println("Longitud del String: " + longStr);
 		byte[] resp = new byte[longStr];
 		for (int i = 0; i < longStr; i++) {
 			resp[i] = dis.readByte();

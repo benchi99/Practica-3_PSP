@@ -4,9 +4,18 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Scanner;
+
+/**
+ * =====================EJERCICIO 1.2==========================
+ * Programa que se conecta a un servidor que gestiona cuentas
+ * matemáticas simples. Se encarga de leer información del cliente,
+ * enviarsela al servidor usando el protocolo UDP y leer la
+ * respuesta de vuelta del servidor.
+ * 
+ * @author Rubén
+ *
+ */
 
 public class Cliente {
 
@@ -30,48 +39,25 @@ public class Cliente {
 		try {
 			host = InetAddress.getByName(ip);
 			sock = new DatagramSocket();
-		} catch (UnknownHostException uhe) {
-			System.err.println("[ERROR] No se encuentra el host. Terminando...");
-			System.exit(1);
-		} catch (SocketException ske) {
-			System.err.println("[ERROR] Hubo un problema con el socket. Terminando...");
-			System.exit(1);
-		}
 		
-		try {
-			
 			while (true) {
 				
 				System.out.println(" - CLIENTE OPERACIONES MATEMÁTICAS - ");
 				System.out.print("Seleccione operador ó comando(+, -, *, /, F, A): ");
 				op = teclado.next().toUpperCase().charAt(0);
 
-				switch (op) {
-					case '+':
-						construirInstruccion(n1, n2);
-						break;
-					case '-':
-						construirInstruccion(n1, n2);
-						break;
-					case '*':
-						construirInstruccion(n1, n2);
-						break;
-					case '/':
-						construirInstruccion(n1, n2);
-						break;
-					case 'F':
-						System.out.println("[INFO] Finalizando la conexión...");
-						sock.close();
-						System.exit(0);
-						break;
-					case 'A':
-						op = 'A';
-						break;
-					default:	
-						System.out.println("Sintáxis inválida.");
-						break;
+				if (op == '+' || op == '-' || op == '*' || op == '/') {		//Construyo la instrucción para el servidor.
+					construirInstruccion(n1, n2);	
+				} else if (op == 'F') {			//El cliente quiere finalizar la aplicación.
+					System.out.println("[INFO] Finalizando la conexión...");
+					sock.close();
+					System.exit(0);
+				} else if (op == 'A') {		//El cliente quiere abortar el servidor.
+					op = 'A';
+				} else {		//No se ha introducido nada válido.
+					System.out.println("Sintáxis inválida.");
 				}
-				
+			
 				enviarPaquete(paqt, sock, op, n1, n2, host);
 				
 				leerPaquete(sock, paqt);
@@ -83,37 +69,69 @@ public class Cliente {
 		}
 	}
 
+	/**
+	 * Lee del servidor un paquete con el contenido necesario de la solución.
+	 * 
+	 * @param sock DatagramSocket.
+	 * @param paqt Paquete.
+	 * @throws IOException Error de E/S.
+	 */
+	
 	private void leerPaquete(DatagramSocket sock, DatagramPacket paqt) throws IOException {
-		
+		//Establezco un buffer.
 		final int LONG_PAQUETE = 64;
-		
 		byte[] bff = new byte[LONG_PAQUETE];
 		
+		//Recibo el paquete.
 		paqt = new DatagramPacket(bff, bff.length);
 		sock.receive(paqt);
 		
+		//Divido el array de bytes y lo convierto a lo requerido.
 		int numOp = UtilesArrayBytes.byteToInt(UtilesArrayBytes.splitArray(bff, 0, Integer.BYTES));
 		long sol = UtilesArrayBytes.byteToLong(UtilesArrayBytes.splitArray(bff, Integer.BYTES, Long.BYTES));
 		byte[] str = UtilesArrayBytes.splitArray(bff, (Integer.BYTES + Long.BYTES), (bff.length - (Integer.BYTES + Long.BYTES)));
 		
 		String msg = new String(str).trim();
 		
+		//Imprimo la respuesta.
 		System.out.println("[RESPUESTA] Operación " + numOp + " | " + sol + " | " + msg);
 		
 	}
 
+	/**
+	 * Envía al servidor el paquete con la información necesaria para contar.
+	 * 
+	 * @param paqt Paquete a enviar.
+	 * @param sock Socket por el que enviar.
+	 * @param op Operación a realizar.
+	 * @param uno Primer valor.
+	 * @param dos Segundo valor.
+	 * @param host IP del servidor.
+	 * @throws IOException Error de E/S.
+	 */
+	
 	private void enviarPaquete(DatagramPacket paqt, DatagramSocket sock, char op, long uno, long dos, InetAddress host) throws IOException {
 		
+		//Convierte componentes del la operación a arrays de bytes.
 		byte[] operando = UtilesArrayBytes.charToByte(op);
 		byte[] numeroUno = UtilesArrayBytes.longToByte(uno);
 		byte[] numeroDos = UtilesArrayBytes.longToByte(dos);
 		
+		//Une todos arrays de bytes en uno.
 		byte[] arrayCompleto = UtilesArrayBytes.construyeArrayBytesFinal(operando, numeroUno, numeroDos);
 		
+		//Envía el paquete.
 		paqt = new DatagramPacket(arrayCompleto, arrayCompleto.length, host, port);
 		sock.send(paqt);
 	}
 
+	/**
+	 * Construye la instrucción para montar el paquete.
+	 * 
+	 * @param num1 El primer número.
+	 * @param num2 El segundo número.
+	 */
+	
 	private void construirInstruccion(long num1, long num2) {
 		System.out.print("Introduce el primer número: ");
 		n1 = teclado.nextLong();

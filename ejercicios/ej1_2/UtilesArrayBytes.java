@@ -3,8 +3,10 @@ package ej1_2;
 import java.nio.ByteBuffer;
 
 /**
- * Clase que gestiona conversión de varios tipos primitivos a arrays de bytes,
- * así como métodos utiles para manejar arrays de bytes.
+ * =====================EJERCICIO 1.2==========================
+ * Clase que gestiona conversión de varios tipos primitivos a 
+ * arrays de bytes, así como métodos utiles para manejar arrays
+ * de bytes.
  * 
  * @author Rubén
  */
@@ -95,40 +97,31 @@ public class UtilesArrayBytes {
 	}
 	
 	/**
-	 * Construye un array de bytes sumando de seguido tres arrays, es decir:
-	 * 				ARRAY COMPLETO = ARRAY 1 + ARRAY 2 + ARRAY 3
-	 * (Modificar para que acepte un número indefinido de arrays).
+	 *  Construye un array de bytes sumando de seguido tres arrays, es decir:
+	 * 		ARRAY COMPLETO = ARRAY 1 + ARRAY 2 + ... + ARRAY N
 	 * 
-	 * @param pt1 Primer array.
-	 * @param pt2 Segundo array.
-	 * @param pt3 Tercer array.
-	 * @return Array completo.
+	 * @param part
+	 * @return
 	 */
 	
-	public static byte[] construyeArrayBytesFinal(byte[] pt1, byte[] pt2, byte[] pt3) {
+	public static byte[] construyeArrayBytesFinal(byte[]... part) {
+		//Obtengo la longitud completa del array final.
+		int longitud = 0;
+		for (int i = 0; i < part.length; i++) {
+			longitud = longitud + part[i].length;
+		}
+		byte[] completo = new byte[longitud];
 		
-		byte[] resultado = new byte[pt1.length + pt2.length + pt3.length];
-		int i = 0;
-		
-		//No hace falta que lo digas, sé que esto es un desastre.
-		
-		for (int j = 0;j < pt1.length;j++) {
-			resultado[i] = pt1[j];
-			i++;
+		//Construye el array.
+		int recorreCompleto = 0;
+		for(int i = 0; i < part.length; i++) {
+			for(int j = 0; j < part[i].length; j++) {
+				completo[recorreCompleto] = part[i][j];
+				recorreCompleto++;
+			}
 		}
 		
-		for (int j = 0;j < pt2.length;j++) {
-			resultado[i] = pt2[j];
-			i++;
-			
-		}
-		
-		for (int j = 0;j < pt3.length;j++) {
-			resultado[i] = pt3[j];
-			i++;
-		}
-		
-		return resultado;
+		return completo;
 	}
 	
 	/**
@@ -141,9 +134,12 @@ public class UtilesArrayBytes {
 	 */
 	
 	public static byte[] splitArray(byte[] buff, int margen, int longitud) {
-		
+		//Construyo el array final.
 		byte[] resul = new byte[longitud];
 		
+		/*De parámetros, leo la longitud del array 
+		 * obtenido con el margen especificado.
+		 */
 		for (int i = 0; i < longitud; i++) {
 			resul[i] = buff[margen++];
 		}

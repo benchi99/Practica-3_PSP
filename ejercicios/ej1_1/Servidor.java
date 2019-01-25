@@ -6,6 +6,17 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * =====================EJERCICIO 1.1==========================
+ * Aplicación servidor encargada de gestionar peticiones de
+ * cálculo de operaciones matemáticas utilizando el protocolo
+ * TCP/IP. La aplicación lee información del cliente conectado,
+ * realiza la operación pedida, y la devuelve.
+ * 
+ * @author Rubén
+ *
+ */
+
 public class Servidor {
 
 	final int PORT = 6549;
@@ -108,13 +119,13 @@ public class Servidor {
 	 */
 	
 	private void enviar(DataOutputStream dos, char op, int cuenta, long solucion, long uno, long two) throws IOException {
+		//Hago la operación.
 		String operacion = uno + " " + op + " " + two + " = " + solucion;
-		System.out.println(operacion);
 		
+		//Envio la información de vuelta al cliente.
 		dos.writeInt(cuenta);
 		dos.writeLong(solucion);
 		dos.writeInt(operacion.length());
-		System.out.println("Longitud del texto: " + operacion.length());
 		dos.writeBytes(operacion);
 	}
 }

@@ -96,9 +96,10 @@ public class ClienteArchivos {
 	private void descarga(File destino, DataInputStream entradaNet) throws IOException {
 		System.out.println("[INFO] Comenzando descarga...");
 		BufferedOutputStream bufferSalidaArchivo = new BufferedOutputStream(new FileOutputStream(destino));
-		long longitudArchivo = entradaNet.readLong();
+		long longitudArchivo = entradaNet.readLong();	//Leo la longitud del archivo.
 		System.out.println("[INFO] Se van a descargar " + longitudArchivo + " bytes.");
 		byte[] buffer = new byte[1000];
+		//Comienzo la descarga.
 		System.out.println("[INFO] Descargando...");
 		int leidos = entradaNet.read(buffer, 0, 1000);
 		while (true) {
