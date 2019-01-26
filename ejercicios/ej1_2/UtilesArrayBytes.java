@@ -97,11 +97,13 @@ public class UtilesArrayBytes {
 	}
 	
 	/**
-	 *  Construye un array de bytes sumando de seguido tres arrays, es decir:
-	 * 		ARRAY COMPLETO = ARRAY 1 + ARRAY 2 + ... + ARRAY N
+	 *  Construye un array de bytes sumando de seguido un número 
+	 *  indeterminado de arrays, es decir:
+	 * 		
+	 * ARRAY COMPLETO = ARRAY 1 + ARRAY 2 + ... + ARRAY N
 	 * 
-	 * @param part
-	 * @return
+	 * @param part N partes que compondrán el array final.
+	 * @return Array completo.
 	 */
 	
 	public static byte[] construyeArrayBytesFinal(byte[]... part) {

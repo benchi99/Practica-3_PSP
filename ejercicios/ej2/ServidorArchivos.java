@@ -9,6 +9,17 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * 
+ * ===================EJERCICIO 2==========================
+ * 
+ * Programa que transferirá a un cliente un archivo especificado
+ * por el mismo.
+ * 
+ * @author Rubén
+ *
+ */
+
 public class ServidorArchivos {
 
 	int port = 6549;

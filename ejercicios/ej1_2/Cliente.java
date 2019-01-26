@@ -26,10 +26,10 @@ public class Cliente {
 	Scanner teclado = new Scanner(System.in);
 	
 	public static void main(String[] args) {
-		new Cliente().run();
+		new Cliente().run(args);
 	}
 
-	private void run() {
+	private void run(String[] args) {
 		InetAddress host = null;
 		DatagramSocket sock = null;
 		DatagramPacket paqt = null;
@@ -37,7 +37,11 @@ public class Cliente {
 		char op;
 		
 		try {
-			host = InetAddress.getByName(ip);
+			if (args.length == 1) {
+				host = InetAddress.getByName(args[0]);
+			} else {
+				host = InetAddress.getByName(ip);
+			}
 			sock = new DatagramSocket();
 		
 			while (true) {

@@ -60,7 +60,7 @@ public class Servidor {
 		
 		System.out.println("[INFO] Esperando un cliente...");
 		sk = svSock.accept();
-		System.out.println("[INFO] Conexión aceptada - " + sk.toString());
+		System.out.println("[INFO] Conexión aceptada - " + sk.getInetAddress());
 		
 		return sk;
 	}

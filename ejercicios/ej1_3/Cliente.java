@@ -70,7 +70,7 @@ public class Cliente {
 
 			}
 		} catch (IOException ioe) {
-			System.out.println("[ERROR] Error de E/S.");
+			System.err.println("[ERROR] Error de E/S.");
 		}
 		
 		teclado.close();

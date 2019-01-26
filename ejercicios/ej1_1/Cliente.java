@@ -39,7 +39,7 @@ public class Cliente {
 		
 		try {
 			System.out.println("[INFO] Estableciendo conexión...");
-			sock = new Socket(ip, port);	//Intentamos conectarnos al cliente.
+			sock = new Socket(ip, port);	//Intentamos conectarnos al servidor.
 			System.out.println("[INFO] Conexión establecida.");
 			//Establecemos los streams de entrada y salida.
 			entrada = new DataInputStream(sock.getInputStream());
@@ -70,7 +70,7 @@ public class Cliente {
 
 			}
 		} catch (IOException ioe) {
-			System.out.println("[ERROR] Error de E/S.");
+			System.err.println("[ERROR] Error de E/S.");
 		}
 		
 		teclado.close();
